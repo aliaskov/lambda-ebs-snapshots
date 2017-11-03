@@ -12,7 +12,11 @@ import os
 # Manually configure EC2 region, account IDs, timezone
 ec = boto3.client('ec2', region_name='us-east-1')
 aws_account_ids = ['020662911542']
-default_days_of_renention = 7
+# Here is how you can get the AWS account namber: 
+# account_id = boto3.client("sts").get_caller_identity()["Account"]
+# or
+# curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep -oP '(?<="accountId" : ")[^"]*(?=")'
+default_days_of_retention = 7
 os.environ['TZ'] = 'US/Eastern'
 
 # Nothing to configure below this line
@@ -36,7 +40,7 @@ def create_new_backups():
 
     for volume in volumes:
         vol_id = volume['VolumeId']
-        vol_retention = default_days_of_renention
+        vol_retention = default_days_of_retention
         snap_date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         snap_desc = vol_id
 
